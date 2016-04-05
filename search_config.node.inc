@@ -211,7 +211,7 @@ function _search_config_advanced_form(&$form, $form_state) {
 
     if (isset($sections['options']['type']) && $ftype['#access']) {
       $types = explode(',', $sections['options']['type']);
-      $ftype['#default_value'] = drupal_map_assoc($types);
+      $ftype['#default_value'] = array_combine($types, $types);
       unset($sections['options']['type']);
     }
 
@@ -232,10 +232,10 @@ function _search_config_advanced_form(&$form, $form_state) {
   if ($ftype['#access']) {
     // Remove these ones from the display.
     $base_types = array_filter($fs_types['filter']);
-    $access = user_access('search all content');
+    $access = \Drupal::currentUser()->hasPermission('search all content');
     $allowed_types = array();
     foreach (search_config_content_types() as $key => $type) {
-      if (in_array($key, $base_types) || !($access || user_access("search $key content"))) {
+      if (in_array($key, $base_types) || !($access || \Drupal::currentUser()->hasPermission("search $key content"))) {
         unset($ftype['#options'][$key]);
       }
       else {
@@ -310,7 +310,7 @@ function search_config_type_element_validate($element, &$form_state) {
       $types[$type] = $type;
     }
   }
-  form_set_value($element, $types, $form_state);
+  $form_state->setValueForElement($element, $types);
 }
 
 /**

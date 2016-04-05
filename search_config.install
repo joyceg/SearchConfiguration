@@ -54,7 +54,7 @@ function search_config_install() {
   module_load_include('module', 'search_config');
 
   $insert = db_insert('role_permission')->fields(array('rid', 'permission'));
-  foreach (array(DRUPAL_ANONYMOUS_RID, DRUPAL_AUTHENTICATED_RID) as $rid) {
+  foreach (array(\Drupal\Core\Session\AccountInterface::ANONYMOUS_ROLE, \Drupal\Core\Session\AccountInterface::AUTHENTICATED_RID) as $rid) {
     if (!search_config_get_roles_by_permission($rid, 'search all content')) {
       $insert->values(array(
         'rid' => $rid,
@@ -67,14 +67,24 @@ function search_config_install() {
 
   // And prevent warnings.
   $settings = search_config_node_settings();
-  variable_set('search_config', $settings);
+  // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// variable_set('search_config', $settings);
+
 }
 
 /**
  * Implements hook_uninstall().
  */
 function search_config_uninstall() {
-  variable_del('search_config');
+  // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// variable_del('search_config');
+
 }
 
 /**
@@ -88,7 +98,7 @@ function search_config_update_7000() {
 
   // Ensure that we do not block search by default.
   $insert = db_insert('role_permission')->fields(array('rid', 'permission'));
-  foreach (array(DRUPAL_ANONYMOUS_RID, DRUPAL_AUTHENTICATED_RID) as $rid) {
+  foreach (array(\Drupal\Core\Session\AccountInterface::ANONYMOUS_ROLE, \Drupal\Core\Session\AccountInterface::AUTHENTICATED_RID) as $rid) {
     if (!search_config_get_roles_by_permission($rid, 'search all content')) {
       $insert->values(array(
         'rid' => $rid,
@@ -100,16 +110,21 @@ function search_config_update_7000() {
 
   // And prevent warnings.
   $settings = search_config_node_settings();
-  variable_set('search_config', $settings);
+  // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// variable_set('search_config', $settings);
+
 
   // Remove the old 6.x variables.
-  variable_del('search_config_disable_or');
-  variable_del('search_config_disable_phrase');
-  variable_del('search_config_disable_negative');
-  variable_del('search_config_disable_category_all');
-  variable_del('search_config_disable_category');
-  variable_del('search_config_disable_type');
-  variable_del('search_config_disable_index_type');
+  \Drupal::config('search_config.settings')->clear('search_config_disable_or')->save();
+  \Drupal::config('search_config.settings')->clear('search_config_disable_phrase')->save();
+  \Drupal::config('search_config.settings')->clear('search_config_disable_negative')->save();
+  \Drupal::config('search_config.settings')->clear('search_config_disable_category_all')->save();
+  \Drupal::config('search_config.settings')->clear('search_config_disable_category')->save();
+  \Drupal::config('search_config.settings')->clear('search_config_disable_type')->save();
+  \Drupal::config('search_config.settings')->clear('search_config_disable_index_type')->save();
 }
 
 /**

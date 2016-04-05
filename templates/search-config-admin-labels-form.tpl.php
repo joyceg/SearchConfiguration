@@ -19,8 +19,8 @@
       <label for="<?php print $form['labels'][$key]['#id'] ?>"><?php print $labels[$key][0] ?> </label>
       <em><?php print $labels[$key][1]; ?></em>
     </td>
-    <td style="vertical-align: top;"<?php print $has_title_display ? '' : ' colspan="2"' ?>><?php print drupal_render($form['labels'][$key]); ?></td>
-    <?php if ($has_title_display) : ?><td><?php print drupal_render($form['title_display'][$key]); ?></td><?php endif; ?>
+    <td style="vertical-align: top;"<?php print $has_title_display ? '' : ' colspan="2"' ?>><?php print \Drupal::service("renderer")->render($form['labels'][$key]); ?></td>
+    <?php if ($has_title_display) : ?><td><?php print \Drupal::service("renderer")->render($form['title_display'][$key]); ?></td><?php endif; ?>
   </tr>
 <?php
     endforeach;
